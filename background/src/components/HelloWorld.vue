@@ -1,52 +1,37 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-
-defineProps<{ msg: string }>()
-
-const count = ref(0)
-</script>
-
 <template>
-  <h1>{{ msg }}</h1>
-
-  <p>
-    Recommended IDE setup:
-    <a href="https://code.visualstudio.com/" target="_blank">VSCode</a>
-    +
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
-  </p>
-
-  <p>See <code>README.md</code> for more information.</p>
-
-  <p>
-    <a href="https://vitejs.dev/guide/features.html" target="_blank">
-      Vite Docs
-    </a>
-    |
-    <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
-  </p>
-
-  <button type="button" @click="count++">count is: {{ count }}</button>
-  <p>
-    Edit
-    <code>components/HelloWorld.vue</code> to test hot module replacement.
-  </p>
+  <div class="ctn">
+    <n-input v-model:value="value" @keyup="handleKeyUp" placeholder=""/>
+    <n-data-table :columns="columns" :data="data" />
+  </div>
 </template>
 
+<script lang="ts" setup>
+import { ref } from "vue";
+import { data, columns } from "./data";
+const value = ref("");
+const handleKeyUp = () => {
+  if (value.value.length > 2) value.value = "";
+  if (value.value.length == 2) {
+    const inputArr = value.value.split("");
+    let row: any = inputArr[0];
+    if (row == "0") row = 10;
+    if (row == "/") row = 11;
+    if (row == "*") row = 12;
+    if (row == "+") row = 13;
+    let column = inputArr[1];
+    if (column == "1") column = "plumBlossom";
+    if (column == "2") column = "spade";
+    if (column == "3") column = "heart";
+    if (column == "4") column = "block";
+    data.value[row - 1][column] = "";
+
+    value.value = "";
+  }
+};
+</script>
+
 <style scoped>
-a {
-  color: #42b983;
-}
-
-label {
-  margin: 0 0.5em;
-  font-weight: bold;
-}
-
-code {
-  background-color: #eee;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: #304455;
+.ctn :deep(.red) {
+  color: red;
 }
 </style>
